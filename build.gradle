@@ -1,0 +1,40 @@
+plugins {
+	id 'java'
+	id 'org.springframework.boot' version '3.5.16'
+	id 'io.spring.dependency-management' version '1.1.7'
+}
+
+group = 'com.rimac.webflux'
+version = '0.0.1-SNAPSHOT'
+
+java {
+	toolchain {
+		languageVersion = JavaLanguageVersion.of(17)
+	}
+}
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+	implementation 'org.springframework.boot:spring-boot-starter-webflux'
+	implementation 'org.springframework.boot:spring-boot-starter-data-r2dbc'
+  runtimeOnly 'com.h2database:h2'
+  implementation 'io.r2dbc:r2dbc-h2'
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+  testImplementation 'io.projectreactor:reactor-test'
+  testImplementation 'org.mockito:mockito-junit-jupiter'
+}
+
+tasks.named('test') {
+	useJUnitPlatform()
+
+	testLogging {
+	  events "passed", "skipped", "failed"
+	  exceptionFormat = "full"
+	  showExceptions = true
+	  showCauses = true
+	  showStackTraces = true
+	}
+}

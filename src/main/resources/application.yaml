@@ -1,0 +1,20 @@
+spring:
+  application:
+    name: wf-grd-hexagon-alumno-api
+
+  r2dbc:
+    url: r2dbc:h2:mem:///alumnodb
+    username: sa
+    password:
+
+  h2:
+    console:
+      enabled: true
+
+  sql:
+    init:
+      mode: always
+      
+logging:
+  level:
+    io.r2dbc.h2: DEBUG

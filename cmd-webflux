@@ -1,0 +1,91 @@
+cat -n cmd-webflux
+sed -n '3p' cmd-webflux | bash
+sed -n '3,5p' cmd-webflux | bash
+
+curl localhost:8080/alumnos/activos | jq
+curl -i localhost:8080/alumnos/activos
+curl -iX POST localhost:8080/alumnos -H "Content-Type: application/json" -d '{"id":1,"nombre":"Ali","apellido":"Sancho","edad": 48, "estado":"ACTIVO"}'
+curl -iX POST localhost:8080/alumnos -H "Content-Type: application/json" -d '{"id":2,"nombre":"Isabel","apellido":"Canaza","edad": 70, "estado":"ACTIVO"}'
+
+test
+touch src/test/java/com/rimac/webflux/application/service/AlumnoServiceTest.java
+mkdir -p src/test/java/com/rimac/webflux/application/service
+rm src/test/java/com/rimac/webflux/*.java
+
+./gradlew bootRun
+./gradlew clean compileJava
+
+sed -i 's/Product/Alumno/g' src/main/java/com/rimac/webflux/controller/AlumnoController.java
+sed -i 's/Product/Alumno/g' src/main/java/com/rimac/webflux/service/ProductService.java
+mv src/main/java/com/rimac/webflux/service/{Alumno,AlumnoService,}.java
+
+mv src/main/java/com/rimac/webflux/model/{Product,Alumno}.java
+touch src/main/java/com/rimac/webflux/model/Estado.java
+
+touch src/main/java/com/rimac/webflux/config/DatabaseConfig.java
+touch src/main/java/com/rimac/webflux/adapter/in/web/{AlumnoController,GlobalExceptionHandler}.java
+touch src/main/java/com/rimac/webflux/adapter/out/persistence/{AlumnoEntity,AlumnoRepository,AlumnoPersistenceAdapter}.java
+touch src/main/java/com/rimac/webflux/application/port/{in/AlumnoUseCase.java,out/AlumnoRepositoryPort.java}
+touch src/main/java/com/rimac/webflux/application/service/AlumnoService.java
+touch src/main/java/com/rimac/webflux/domain/model/{Alumno,Estado}.java
+touch src/main/java/com/rimac/webflux/domain/exception/AlumnoAlreadyExistsException.java
+touch src/main/resources/schema.sql
+
+mkdir -p src/main/java/com/rimac/webflux/domain/{model,exception}
+mkdir -p src/main/java/com/rimac/webflux/application/{port/in,port/out,service}
+mkdir -p src/main/java/com/rimac/webflux/adapter/{in/web,out/persistence}
+
+rm -rf src/main/java/com/rimac/webflux/{service,controller,model,repository}
+
+./gradlew --status
+top -p 71817
+ps -o pid,rss,vsz,%mem,cmd -p 71817
+cat gradle/wrapper/gradle-wrapper.properties		version gradle del proyecto
+touch ~/.gradle/gradle.properties					desabilitar daemon gradle
+org.gradle.daemon=false
+
+2.-proyecto existente
+2.4.-opcional modificar nombre clase del proyecto
+- nombre clase WebFluxApplication.java - opcional
+2.3.-dependencias build.gradle (pom.xml)
+- plugins
+  id 'io.spring.dependency-management' version '1.1.7'
+-dependencias
+  implementation 'org.springframework.boot:spring-boot-starter-data-r2dbc'
+  runtimeOnly 'com.h2database:h2'
+  runtimeOnly 'io.r2dbc:r2dbc-h2'
+  testImplementation 'org.springframework.boot:spring-boot-starter-test'
+2.2.-nombre proyecto
+- src/main/resources/application.yaml
+  spring.application.name: grd-r2dbc-hexagon-api  
+- settings.gradle -> rootProject.name='grd-r2dbc-hexagon-api'
+2.1.-crear
+- cmd-webflux
+
+1.-project configuracion
+- Project: Gradle - Groovy 
+- Language: Java 
+- Spring Boot: 3.5.16
+- Java: 17 
+- Group: com.rimac.webflux 
+- Artifact: lab-grd-r2dbc-api
+- Package name: com.rimac.webflux 
+- Packaging: Jar 
+- Configuration: yaml 
+- Dependencies: Spring reactive web
+
+0.-IDE Helix 
+0.2.-comands
+:reload
+0.1.-configuration
+~/.config/helix/languages.toml				configurar jdstl
+~/.config/helix/ignore						ignorar
+~/.local/share/jdtls/bin/jdtls.py			definir ~/.sdkman/candidates/java/21.0.11-tem/ y -Xm
+~/.gradle/gradle.properties					
+~/.cache/jdtls
+
+ps aux | grep -E "jdtls|gradle"
+kill 28517
+./gradlew --status obtener el proceso
+jcmd 51713 VM.flags
+jcmd 47860 VM.flags
